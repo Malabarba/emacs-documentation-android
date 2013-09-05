@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+  <item
+      android:id="@+id/menu_search"
+      android:actionLayout="@layout/search"
+      android:orderInCategory="0"
+      android:showAsAction="always|collapseActionView"
+      android:icon="@drawable/ic_menu_search"
+      android:title="@string/search_title"/>
+
+  <!-- <item android:actionViewClass="com.actionbarsherlock.widget.SearchView" android:enabled="true" android:id="@+id/search" android:orderInCategory="1" android:showAsAction="never" android:title="title" />	 -->
+
+  <item android:icon="@drawable/ic_menu_search" android:id="@+id/toggle_builtin" android:orderInCategory="10" android:showAsAction="withText" android:title="@string/toggle_builtin" android:checked="false" android:checkable="true"/>
+  
+  <item
+      android:id="@+id/action_settings"
+      android:orderInCategory="100"
+      android:icon="@drawable/ic_sysbar_quicksettings"
+      android:showAsAction="never"
+      android:title="@string/action_settings" />
+  
+  <item
+      android:id="@+id/send_feedback"
+      android:orderInCategory="110"
+      android:showAsAction="never"
+      android:title="@string/send_feedback" />
+  
+</menu>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+  <PreferenceCategory 
+      android:title="@string/pref_share_cat_title"
+      android:key="pref_share_cat_title">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="share_speed_mode"
+        android:summary="@string/share_speed_mode_summ_yes"
+        android:title="@string/share_speed_mode" />
+    
+    <!-- <ListPreference -->
+    <!--     android:defaultValue="@string/back_sync_intervals_default" -->
+    <!--     android:dependency="back_sync" -->
+    <!--     android:dialogTitle="@string/back_sync_interval" -->
+    <!--     android:entries="@array/back_sync_intervals_entries" -->
+    <!--     android:entryValues="@array/back_sync_intervals_values" -->
+    <!--     android:key="back_sync_interval" -->
+    <!--     android:title="@string/back_sync_interval" /> -->
+    
+    <!-- <CheckBoxPreference -->
+    <!--     android:defaultValue="true" -->
+    <!--     android:key="sync_after_done" -->
+    <!--     android:summary="@string/sync_after_done_summ" -->
+    <!--     android:title="@string/sync_after_done" /> -->
+    
+  </PreferenceCategory>
+  
+  <!-- <PreferenceCategory  -->
+  <!--     android:title="@string/pref_other_cat_title" -->
+  <!--     android:key="pref_other_cat_title"> -->
+    
+  <!--   <com.malabarba.simpleshoppinglist.PackageListPreference -->
+  <!--       android:defaultValue="@string/after_done_package_default" -->
+  <!--       android:dialogTitle="@string/after_done_package_dialog" -->
+  <!--       android:entries="@array/after_done_package_entries" -->
+  <!--       android:entryValues="@array/after_done_package_values" -->
+  <!--       android:title="@string/after_done_package" -->
+  <!--       android:summary="@string/after_done_package_summ" -->
+  <!--       android:key="after_done_package"/> -->
+    
+  
+  <!--   <CheckBoxPreference -->
+  <!--       android:defaultValue="false" -->
+  <!--       android:key="click_means_remove" -->
+  <!--       android:summary="@string/click_means_remove_summ_yes" -->
+  <!--       android:title="@string/click_means_remove" /> -->
+  <!--   </PreferenceCategory> -->
+    
+</PreferenceScreen>
