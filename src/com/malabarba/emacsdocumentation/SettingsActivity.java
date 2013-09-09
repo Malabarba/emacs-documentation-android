@@ -17,7 +17,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
        
         if (key.equals("share_speed_mode")) updateShareSpeedMode();
         // if (key.equals("click_means_remove")) updateClickMeansRemoveSummary(sp);
-
     }
 
 
@@ -68,6 +67,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
     public static void createHiddenPreferences() {
         SettingsManager.putIfAbsent("selected_tab", 0, false);
         SettingsManager.putIfAbsent("first_time", true, false);
+        SettingsManager.putIfAbsent("share_speed_mode", true, false);
         SettingsManager.putIfAbsent("toggle_builtin", true, false);
         SettingsManager.commit();    	    	
     }

@@ -1,7 +1,5 @@
 package com.malabarba.emacsdocumentation;
-
 import java.util.Locale;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,34 +12,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
-
-//import java.util.Locale;
-//
-//import android.content.Context;
-//import android.content.Intent;
-//import android.os.Bundle;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.FragmentTransaction;
-//import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
-//import android.support.v4.view.ViewPager;
-//import android.text.Editable;
-//import android.text.TextWatcher;
-//import android.view.Menu;
-//import android.view.MenuItem;
-//import android.view.inputmethod.InputMethodManager;
-//import android.widget.EditText;
-//
-//import com.actionbarsherlock.app.ActionBar;
-//import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
     /**
@@ -81,20 +56,12 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             // This creates the actual DataBase! So it could take a while!
             sd = new SymbolDatabase(this);
         } catch (Exception e) {
-            // App.dialog(getString(R.strings.cant_create_database));
-            App.dialog("Bad exception creating Database!\n"+e);
+            App.dialog(getString(R.string.cant_create_database));
+            // App.dialog("Bad exception creating Database!\n"+e);
             App.e("Couldn't create the database:",e);
         }
         App.d("Database created.");
-        // try{	
-        //     sd.getReadableDatabase();
-        // } catch (Exception e) {
-        //     // App.dialog(getString(R.strings.cant_create_database));
-        //     App.dialog("Bad exception opening Database!\n"+e);
-        //     App.e("Couldn't open the database:",e);
-        // }
-        // App.d("Database Opened.");
-
+        
         // This is in case the first invocation is from the share menu
         onNewIntent(getIntent());
     }
@@ -215,11 +182,12 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     protected void onNewIntent(Intent shareIntent) {
         String action = shareIntent.getAction();
         String type = shareIntent.getType();
-       App.d("Intent Received: " + shareIntent);
+        App.d("Intent Received: " + shareIntent);
         if (Intent.ACTION_SEND.equals(action)
             && (type != null)
             && "text/plain".equals(type))
-                handleSharedText(shareIntent);
+            handleSharedText(shareIntent);
+        
     }
 
     private void handleSharedText(Intent intent) {
@@ -237,7 +205,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         
         App.d("Database ready to query.");
         // Look for exact match if the preference says so.
-        if (ss && sd.lookForExactMatch(text,this)) return;
+        // TODO (800334)
+        
+        if (ss && sd.lookForExactMatch(text, getSupportFragmentManager())) App.d("Found shared!");//return;
        
         // TODO (150989)
         // Check if the menu is expanded

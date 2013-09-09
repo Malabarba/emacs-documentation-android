@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-  <PreferenceCategory 
-      android:title="@string/pref_share_cat_title"
-      android:key="pref_share_cat_title">
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="share_speed_mode"
         android:summary="@string/share_speed_mode_summ_yes"
         android:title="@string/share_speed_mode" />
     
+    <!-- <PreferenceCategory  -->
+    <!--   android:title="@string/pref_share_cat_title" -->
+    <!--   android:key="pref_share_cat_title"> -->
+
+    <!--   </PreferenceCategory> -->
+  
+
     <!-- <ListPreference -->
     <!--     android:defaultValue="@string/back_sync_intervals_default" -->
     <!--     android:dependency="back_sync" -->
@@ -24,8 +28,6 @@
     <!--     android:summary="@string/sync_after_done_summ" -->
     <!--     android:title="@string/sync_after_done" /> -->
     
-  </PreferenceCategory>
-  
   <!-- <PreferenceCategory  -->
   <!--     android:title="@string/pref_other_cat_title" -->
   <!--     android:key="pref_other_cat_title"> -->

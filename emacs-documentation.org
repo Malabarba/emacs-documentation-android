@@ -1,5 +1,6 @@
 * DONE No need for the search button
   CLOSED: [2013-08-26 Mon 11:36]
+* TODO [[file:src/com/malabarba/emacsdocumentation/MainActivity.java::/%20TODO%20(800334)][Use a switch statement to handle the possible outputs of "findExact..." and call fragment from here.]]
 * DONE [[file:src/com/malabarba/emacsdocumentation/MainActivity.java::/%20TODO%20(150989)][Check if the menu is expanded]]
   CLOSED: [2013-09-05 Thu 00:49]
 * DONE Use fragments as tab contents
@@ -67,3 +68,4 @@ this should do for instant search!
 * TODO verificar de onde vem o atraso entre toque e navegação
 * TODO Make first option be the exact match
 * TODO Setting to define initial tab
+* TODO Check jde completion

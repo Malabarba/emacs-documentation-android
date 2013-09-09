@@ -134,10 +134,12 @@ public class App extends Application {
     public static Integer i(String text, Throwable e){return Log.i(tg,text,e);}
     public static Integer v(String text)             {return Log.v(tg,text);  }
     public static Integer v(String text, Throwable e){return Log.v(tg,text,e);}
+    public static Integer wtf(String text)             {return Log.wtf(tg,text);  }
+    public static Integer wtf(String text, Throwable e){return Log.wtf(tg,text,e);}
     
     private static void checkContext() {
         if (mContext == null) {
-            e("Tried getting a context that isn't defined.");
+            wtf("Tried getting a context that isn't defined.");
 //            throw new Exception("Context isn't defined inside App yet!");
         }
     }

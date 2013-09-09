@@ -20,5 +20,10 @@
     <string name="cant_create_database">I cannot create the Database!\nIs your storage full?</string>
     <string name="feedback_email_body">As you can see, I\'ve included some system information. If you don\'t like it feel free to delete it.\n\nAll feedback welcome!</string>
     <string name="feedback_email_subject">Feedback - Emacs Documentation Android</string>
+    <string name="cant_create_database">I couldn\'t create the database. Is your storage full?</string>
+    <string name="function">Function</string>
+    <string name="variable">Variable</string>
+    <string name="symbol_is_both"> is both a Function and a Variable.
+    \nWhich one did you want?</string>
     
 </resources>

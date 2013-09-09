@@ -3,15 +3,13 @@
  */
 package com.malabarba.emacsdocumentation;
 
-//import java.util.Iterator;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.CursorAdapter;
-
 import com.malabarba.hugesqlitecursor.HugeSQLiteCursor;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+import android.support.v4.app.FragmentManager;
 
 /** @author artur */
 public class SymbolDatabase extends SQLiteAssetHelper {
@@ -116,7 +114,7 @@ public class SymbolDatabase extends SQLiteAssetHelper {
 
     // The context is necessary in case we need to query about Fun vs
     // Var. Pass null to avoid querying.
-    public Boolean lookForExactMatch(String name, Context c) {
+    public Boolean lookForExactMatch(String name, FragmentManager fm) {
         String[] nameArray = new String[] {name};
         
         db = getReadableDatabase();
@@ -147,13 +145,17 @@ public class SymbolDatabase extends SQLiteAssetHelper {
         res.close();
 
         if (fun != null) {
-            SymbolListFragment.goToDocumentationByName(fun, 0);
+            if (var != null)
+                SymbolTypeDialog.createAndShow(fm, fun,var);
+            else
+                SymbolListFragment.goToDocumentationByName(fun, 0);
+            // Either way, return true cause it worked
             return true;
         } else if (var != null) {
-
-            SymbolListFragment.goToDocumentationByName(fun, 0);
+            SymbolListFragment.goToDocumentationByName(var, 1);
             return true;
         }
+        
         return false;
     }
     // static private int typeInt = -1;
