@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 import java.util.Locale;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +11,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
     /**
@@ -286,45 +288,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
-
-    
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-    	static public final String TYPE_NUMBER = "com.malabarba.emacsdocumentation.SymbolListFragment.TYPE_NUMBER";
-        
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a DummySectionFragment (defined as a static inner class
-            // below) with the page number as its lone argument.
-            Fragment fragment = new SymbolListFragment();
-            Bundle args = new Bundle();
-            args.putInt(TYPE_NUMBER, position);
-            fragment.setArguments(args);
-            // TODO (666504)
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return SymbolDatabase.Type.values().length + 1;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            if (position == getCount() - 1) return getString(R.string.title_random).toUpperCase(l);
-            return SymbolDatabase.getTableName(position).toUpperCase(l);
-        }
-    }
 
     @Override
     protected void onDestroy() {

@@ -38,6 +38,24 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         }
     }
 
+    // private void updateInitialTab() {
+    //     try {			
+    //         @SuppressWarnings("deprecation")
+    //             Preference pref = findPreference("initial_tab");
+    //         // Set summary to be the user-description for the selected value
+    //         if (SettingsManager.getBoolean("initial_tab",false)) {
+    //             App.d("initial_tab => true.");
+    //             pref.setSummary(getString(R.string.initial_tab_summ_yes, ""));
+    //         } else {
+    //             App.d("initial_tab => false.");
+    //             pref.setSummary(getString(R.string.initial_tab_summ_no, ""));
+    //         }
+
+    //     } catch (Exception e) {
+    //         App.e( "Exception in updateShareSpeedMode.",e);
+    //     }
+    // }
+
     // private void updateClickMeansRemoveSummary(SharedPreferences sharedPref) {
     //     try {			
     //         Preference pref = findPreference("click_means_remove");
@@ -68,6 +86,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         SettingsManager.putIfAbsent("selected_tab", 0, false);
         SettingsManager.putIfAbsent("first_time", true, false);
         SettingsManager.putIfAbsent("share_speed_mode", true, false);
+        // SettingsManager.putIfAbsent("initial_tab", 0, false);
         SettingsManager.putIfAbsent("toggle_builtin", true, false);
         SettingsManager.commit();    	    	
     }

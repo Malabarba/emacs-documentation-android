@@ -30,7 +30,7 @@ public class SymbolListFragment extends ListFragment {
 
     static private String symbolToUrl(String s, int type) {
         return baseUrl
-            + ((type == 0) ? "Fun/" : "Var/")
+            + SectionsPagerAdapter.getDir(type) + "/" 
             + (s.replace("%","%%")).replace("/","%_%");
     }
     
@@ -38,7 +38,7 @@ public class SymbolListFragment extends ListFragment {
     public void onStart() {
         super.onStart();
         setEmptyText(getString(R.string.empty_list));
-        if (typeInt == 2) setEmptyText("Sorry, not implemented yet!"); // This is for the RANDOM tab
+        // if (typeInt == SectionsPagerAdapter.Tabs.values()) setEmptyText("Sorry, not implemented yet!"); // This is for the RANDOM tab
 
         getListView().setOnItemClickListener(new OnItemClickListener() {       
                 @Override

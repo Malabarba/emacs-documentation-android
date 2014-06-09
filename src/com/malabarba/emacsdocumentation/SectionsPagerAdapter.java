@@ -13,12 +13,22 @@ import android.support.v4.app.FragmentPagerAdapter;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-    static public final String TYPE_NUMBER = "com.malabarba.emacsdocumentation.SymbolListFragment.TYPE_NUMBER";
+    static public final String TYPE_NUMBER =
+        "com.malabarba.emacsdocumentation.SymbolListFragment.TYPE_NUMBER";
     
     // This enum allows us to easily change the order of tabs, without
     // having to change anything else in the code. It also automates
     // the process of getting the total number of tabs.
-    static public enum Tabs {Functions, Variables, Random};
+    static public enum Tabs {About, Functions, Variables};
+
+    public static String getDir(int item) {
+        switch (Tabs.values()[item]) {
+        case Functions: return "Fun";
+        case Variables: return "Var";
+        case About: return "No dir in About page";
+        default: return null;
+        }
+    }
     
     @Override
     public Fragment getItem(int item) {
@@ -40,8 +50,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         case Variables:
             return new SymbolListFragment();
 			
-        case Random:
-            return new RandomSymbolFragment();
+        case About:
+            return new AboutFragment();
 			
         default: return null;
         }
@@ -59,7 +69,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (Tabs.values()[item]) {
         case Functions: return App.string(R.string.title_functions).toUpperCase(l);
         case Variables: return App.string(R.string.title_variables).toUpperCase(l);	
-        case Random: return App.string(R.string.title_random).toUpperCase(l);
+        case About: return App.string(R.string.title_about).toUpperCase(l);
         default: return null;
         }
     }
