@@ -18,13 +18,27 @@
         android:name=".MainActivity"
         android:label="@string/icon_name"
         android:launchMode="singleTask" >
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"></action>
+        <category android:name="android.intent.category.DEFAULT"></category>
+        <category android:name="android.intent.category.BROWSABLE"></category>
+
+        <data android:host="bruce-connor.github.io" android:scheme="http"
+              android:pathPrefix="emacs-online-documentation/Fun"></data>
+        <data android:host="bruce-connor.github.io" android:scheme="http"
+              android:pathPrefix="emacs-online-documentation/Face"></data>
+        <data android:host="bruce-connor.github.io" android:scheme="http"
+              android:pathPrefix="emacs-online-documentation/Var"></data>
+      </intent-filter>
+      
       <intent-filter>
         <action android:name="android.intent.action.SEND" />
-
         <category android:name="android.intent.category.DEFAULT" />
         
         <data android:mimeType="text/plain" />
       </intent-filter>
+      
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -32,9 +46,7 @@
       </intent-filter>
     </activity>
 
-    <activity
-        android:name=".SettingsActivity"
-        android:label="@string/app_name" >
+    <activity android:name=".SettingsActivity" android:label="@string/app_name" >
     </activity>
   </application>
 
