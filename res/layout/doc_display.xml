@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:maxLines = "50"
+    android:scrollbars = "vertical"
+    android:id="@+id/doc_display"
+    android:linksClickable="false"
+    android:paddingBottom="@dimen/doc_vertical_margin"
+    android:paddingLeft="@dimen/doc_horizontal_margin"
+    android:paddingRight="@dimen/doc_horizontal_margin"
+    android:paddingTop="@dimen/doc_vertical_margin"
+    android:scrollHorizontally="false"
+    android:text="@string/loading"
+    android:typeface="Droid Sans Mono" />
+
