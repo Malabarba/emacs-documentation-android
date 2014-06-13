@@ -24,3 +24,4 @@ local.properties
 /build.properties
 /eod.db
 *~
+/emacs-documentation.org
