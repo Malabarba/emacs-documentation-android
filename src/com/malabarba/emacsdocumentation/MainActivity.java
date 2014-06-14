@@ -134,7 +134,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             configureSearchView(menu);
             sd.updateMatches(sharedText);
             sharedText = "";
-        }
+        } 
         
         return super.onCreateOptionsMenu(menu);
     }
@@ -146,7 +146,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             boolean isDocPage =
                 mSectionsPagerAdapter
                 .tabIsDocPage(actionBar.getSelectedNavigationIndex());
-        
+            
+            if (isDocPage) mActionMenu.findItem(R.id.menu_search).collapseActionView();
             if (mActionMenu != null) {
                 mActionMenu.findItem(R.id.menu_search).setVisible(!isDocPage);
                 mActionMenu.findItem(R.id.share_url).setVisible(isDocPage);
