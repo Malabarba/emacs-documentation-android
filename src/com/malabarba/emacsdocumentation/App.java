@@ -107,6 +107,11 @@ public class App extends Application {
         return getContext().getString(id);
     }
        
+    static String streamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+    
     public static InputStream contextOpenRawResources(int id){
         return getContext().getResources().openRawResource(id);
     }
