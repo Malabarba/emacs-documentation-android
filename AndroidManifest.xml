@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.malabarba.emacsdocumentation"
-          android:versionCode="4"
-          android:versionName="1.2.1" >
+          android:versionCode="5"
+          android:versionName="1.3" >
 
   <uses-sdk
       android:minSdkVersion="8"
       android:targetSdkVersion="19" />
 
+  <uses-permission android:name="android.permission.INTERNET" />
   <application
       android:name=".App"
       android:allowBackup="true"
@@ -20,16 +21,16 @@
         android:launchMode="singleTask" >
 
       <intent-filter>
-        <action android:name="android.intent.action.VIEW"></action>
-        <category android:name="android.intent.category.DEFAULT"></category>
-        <category android:name="android.intent.category.BROWSABLE"></category>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
 
         <data android:host="bruce-connor.github.io" android:scheme="http"
-              android:pathPrefix="emacs-online-documentation/Fun"></data>
+              android:pathPrefix="/emacs-online-documentation/Fun"/>
         <data android:host="bruce-connor.github.io" android:scheme="http"
-              android:pathPrefix="emacs-online-documentation/Face"></data>
+              android:pathPrefix="/emacs-online-documentation/Face"/>
         <data android:host="bruce-connor.github.io" android:scheme="http"
-              android:pathPrefix="emacs-online-documentation/Var"></data>
+              android:pathPrefix="/emacs-online-documentation/Var"/>
       </intent-filter>
       
       <intent-filter>

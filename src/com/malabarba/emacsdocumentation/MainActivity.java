@@ -3,6 +3,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +12,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnActionExpandListener;
+
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -35,11 +38,13 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     ViewPager mViewPager = null;
     /** The actionbar. */
     ActionBar actionBar = null;
+    Menu mActionMenu = null;
     /** Search field in the actionbar. */
     EditText editSearch = null;
     MenuItem menuSearch = null;
     /** The text we receive from other apps. */
     String sharedText = "";
+    static public Uri sharedUri = null;
     /** The Database. */
     SymbolDatabase sd = null;
 
@@ -121,20 +126,35 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         // Inflate the menu; this adds items to the action bar if it is present.
         getSupportMenuInflater().inflate(R.menu.main, menu);
 
-        // Set the right icon for the checkbox
-        // (disabled for now, since it's not supported yet)
-        menu.findItem(R.id.toggle_builtin).setVisible(false);
-        if (SettingsManager.getBoolean("toggle_builtin"))
-            menu.findItem(R.id.toggle_builtin).setIcon(R.drawable.btn_check_on);
-        else
-            menu.findItem(R.id.toggle_builtin).setIcon(R.drawable.btn_check_off);
+        mActionMenu = menu;
+        updateActionButtons();
 
-        configureSearchView(menu);
-        sd.updateMatches(sharedText);
-        sharedText = "";
+        if (!mSectionsPagerAdapter
+            .tabIsDocPage(actionBar.getSelectedNavigationIndex())) {
+            configureSearchView(menu);
+            sd.updateMatches(sharedText);
+            sharedText = "";
+        }
         
         return super.onCreateOptionsMenu(menu);
     }
+
+    // Hide and show action buttons depending on the nature of current
+    // tab.
+    public void updateActionButtons() {
+        if (mSectionsPagerAdapter != null) {
+            boolean isDocPage =
+                mSectionsPagerAdapter
+                .tabIsDocPage(actionBar.getSelectedNavigationIndex());
+        
+            if (mActionMenu != null) {
+                mActionMenu.findItem(R.id.menu_search).setVisible(!isDocPage);
+                mActionMenu.findItem(R.id.share_url).setVisible(isDocPage);
+                mActionMenu.findItem(R.id.share_text).setVisible(isDocPage);
+                mActionMenu.findItem(R.id.close_page).setVisible(isDocPage);
+            }
+        }
+    }    
     
     public boolean configureSearchView(Menu menu) {
         // Show the search menu item in menu.xml
@@ -189,13 +209,28 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             && (type != null)
             && "text/plain".equals(type))
             handleSharedText(shareIntent);
-        
+
+        else if (Intent.ACTION_VIEW.equals(action))
+            handleSharedURL(shareIntent);
     }
 
+    private void handleSharedURL(Intent intent) {
+        sharedUri = intent.getData();
+        App.toast("Got this URI:\n"+sharedUri);
+
+        mSectionsPagerAdapter.newDocPage();
+        
+        actionBar.addTab(actionBar.newTab()
+                         .setText(getString(R.string.doc_page_title))
+                         .setTabListener(this), true);
+        
+        mSectionsPagerAdapter.notifyDataSetChanged();
+    }
+    
     private void handleSharedText(Intent intent) {
-        String text = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
-//        App.toast("Got this text:\n"+text);
-        Boolean ss = SettingsManager.getBoolean("share_speed_mode");
+            String text = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
+            //        App.toast("Got this text:\n"+text);
+            Boolean ss = SettingsManager.getBoolean("share_speed_mode");
         App.d("Share_speed is "+ ss);
         
         if (sd == null) {
@@ -255,22 +290,22 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             startActivity(new Intent(this, SettingsActivity.class));
             break;
 
-        case R.id.toggle_builtin:
-            // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if (SettingsManager.getBoolean("toggle_builtin")) {
-                // This turns it off
-                SettingsManager.put("toggle_builtin", false);
-                item.setIcon(R.drawable.btn_check_off);
-                item.setChecked(false);
-                App.toast("Using only built-in packages.");
-            } else {
-                // This turns it on
-                SettingsManager.put("toggle_builtin", true);
-                item.setIcon(R.drawable.btn_check_on);
-                item.setChecked(true);
-                App.toast("Including ELPA packages.");
-            }
-            break;
+        // case R.id.toggle_builtin:
+        //     // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        //     if (SettingsManager.getBoolean("toggle_builtin")) {
+        //         // This turns it off
+        //         SettingsManager.put("toggle_builtin", false);
+        //         item.setIcon(R.drawable.btn_check_off);
+        //         item.setChecked(false);
+        //         App.toast("Using only built-in packages.");
+        //     } else {
+        //         // This turns it on
+        //         SettingsManager.put("toggle_builtin", true);
+        //         item.setIcon(R.drawable.btn_check_on);
+        //         item.setChecked(true);
+        //         App.toast("Including ELPA packages.");
+        //     }
+        //     break;
         }
 
         return true;
@@ -280,7 +315,10 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+        int position = tab.getPosition();
+        mViewPager.setCurrentItem(position);
+
+        updateActionButtons();
     } 
 
     @Override

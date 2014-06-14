@@ -20,7 +20,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     // having to change anything else in the code. It also automates
     // the process of getting the total number of tabs.
     static public enum Tabs {About, Functions, Variables};
-
+    int docPageCount = 0;
+    
     public static String getDir(int item) {
         switch (Tabs.values()[item]) {
         case Functions: return "Fun";
@@ -29,38 +30,47 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         default: return null;
         }
     }
+
+    public boolean tabIsDocPage(int item) {
+        return item >= Tabs.values().length;
+    }
     
     @Override
     public Fragment getItem(int item) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a DummySectionFragment (defined as a static inner class
-        // below) with the page number as its lone argument.
-    
     	Fragment fragment = decideNewFragment(item);
     	Bundle args = new Bundle();
         args.putInt(TYPE_NUMBER, item);
         fragment.setArguments(args);
+        
         // TODO (666504)
         return fragment;
     }
-
-    private Fragment decideNewFragment(int item) {
-    	switch (Tabs.values()[item]) {
-        case Functions:
-        case Variables:
-            return new SymbolListFragment();
-			
-        case About:
-            return new AboutFragment();
-			
-        default: return null;
-        }
+    
+    public int newDocPage() {
+        return ++docPageCount;
+    }
+    
+    private Fragment decideNewFragment (int item) {
+        if (item >= Tabs.values().length) {
+            return new DocFragment();
+        } else 
+            switch (Tabs.values()[item]) {
+            case Functions:
+            case Variables:
+                return new SymbolListFragment();
+            case About:
+                return new AboutFragment();
+            default: 
+                App.d("Strange fragment requested from sectionspageradapter");
+                return null;
+            }
     }
 
     @Override
     public int getCount() {
         // Show as many tabs as we have defined.
-        return Tabs.values().length;
+        return Tabs.values().length + docPageCount;
     }
 
     @Override

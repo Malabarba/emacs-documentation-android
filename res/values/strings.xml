@@ -14,14 +14,16 @@
   <string name="empty_list">No results</string>
   <string name="send_feedback">Feedback</string>
   <string name="search_hint">Search Term</string>
-  <string name="toggle_builtin">Toggle Built-in</string>
+  <string name="toggle_builtin">Use Built-in Viewer</string>
+  <string name="toggle_builtin_summ_yes">Using built-in viewer for documentation.</string>
+  <string name="toggle_builtin_summ_no">Using external browser for documentation.</string>
   <string name="pref_share_cat_title">Share Menu</string>
   <string name="share_speed_mode">GO on Exact Match</string>
   <string name="share_speed_mode_summ_yes">If shared string matches a name exactly, go straight to documentation. Only applies when coming from the share menu</string>
   <string name="share_speed_mode_summ_no">Offer list of matches even if match is exact. Only applies when coming from the share menu.</string>
   <string name="feedback_email_body">As you can see, I\'ve included some system information. If you don\'t like it feel free to delete it.\n\nAll feedback welcome!</string>
   <string name="feedback_email_subject">Feedback - Emacs Documentation Android</string>
-  <string name="about_content">Emacs Documentation v1.2.1\nby Artur Malabarba\n\n
+  <string name="about_content">Emacs Documentation v1.3\nby Artur Malabarba\n\n
   If you like my work, buy the donate version:\n
   <a href="market://details?id=com.malabarba.emacsdocumentation">Donate Version</a>\n\n
   or donate through Paypal:\n
@@ -31,5 +33,9 @@
   <string name="variable">Variable</string>
   <string name="symbol_is_both"> is both a Function and a Variable.
   \nWhich one did you want?</string>
+  <string name="close_page">Close Page</string>
+  <string name="share_text">Text</string>
+  <string name="share_url">URL</string>
+  <string name="doc_page_title">DOC</string>
   
 </resources>

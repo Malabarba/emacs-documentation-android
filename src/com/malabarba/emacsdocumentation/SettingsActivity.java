@@ -16,14 +16,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         // }
        
         if (key.equals("share_speed_mode")) updateShareSpeedMode();
-        // if (key.equals("click_means_remove")) updateClickMeansRemoveSummary(sp);
+        if (key.equals("toggle_builtin")) updateToggleBuiltin();
     }
-
-
+    
     private void updateShareSpeedMode() {
-        try {			
+        try {
             @SuppressWarnings("deprecation")
-			Preference pref = findPreference("share_speed_mode");
+                Preference pref = findPreference("share_speed_mode");
             // Set summary to be the user-description for the selected value
             if (SettingsManager.getBoolean("share_speed_mode",false)) {
                 App.d("share_speed_mode => true.");
@@ -37,49 +36,33 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
             App.e( "Exception in updateShareSpeedMode.",e);
         }
     }
+    
+    private void updateToggleBuiltin() {
+        try {			
+            @SuppressWarnings("deprecation")
+                Preference pref = findPreference("toggle_builtin");
+            // Set summary to be the user-description for the selected value
+            if (SettingsManager.getBoolean("toggle_builtin",false)) {
+                App.d("toggle_builtin => true.");
+                pref.setSummary(getString(R.string.toggle_builtin_summ_yes, ""));
+            } else {
+                App.d("toggle_builtin => false.");
+                pref.setSummary(getString(R.string.toggle_builtin_summ_no, ""));
+            }
 
-    // private void updateInitialTab() {
-    //     try {			
-    //         @SuppressWarnings("deprecation")
-    //             Preference pref = findPreference("initial_tab");
-    //         // Set summary to be the user-description for the selected value
-    //         if (SettingsManager.getBoolean("initial_tab",false)) {
-    //             App.d("initial_tab => true.");
-    //             pref.setSummary(getString(R.string.initial_tab_summ_yes, ""));
-    //         } else {
-    //             App.d("initial_tab => false.");
-    //             pref.setSummary(getString(R.string.initial_tab_summ_no, ""));
-    //         }
-
-    //     } catch (Exception e) {
-    //         App.e( "Exception in updateShareSpeedMode.",e);
-    //     }
-    // }
-
-    // private void updateClickMeansRemoveSummary(SharedPreferences sharedPref) {
-    //     try {			
-    //         Preference pref = findPreference("click_means_remove");
-       	
-    //         // Set summary to be the user-description for the selected value
-    //         if (sharedPref.getBoolean("click_means_remove",false)) {
-    //             App.d("click_means_remove changed to true.");
-    //             pref.setSummary(getString(R.string.click_means_remove_summ_yes, ""));
-    //         } else {
-    //             App.d("click_means_remove changed to false.");
-    //             pref.setSummary(getString(R.string.click_means_remove_summ_no, ""));
-    //         }
-
-    //     } catch (Exception e) {
-    //         App.e( "Exception in updateClickMeansRemoveSummary.",e);
-    //     }
-    // }
-
+        } catch (Exception e) {
+            App.e( "Exception in updateToggleBuiltin.",e);
+        }
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         // Load the legacy preferences headers
         oldPreferences();
+        updateToggleBuiltin();
+        updateShareSpeedMode();
     }
 
     public static void createHiddenPreferences() {

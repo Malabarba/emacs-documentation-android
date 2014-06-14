@@ -5,6 +5,12 @@
       android:key="share_speed_mode"
       android:summary="@string/share_speed_mode_summ_yes"
       android:title="@string/share_speed_mode" />
+  <CheckBoxPreference
+      android:key="toggle_builtin"
+      android:summary="@string/toggle_builtin_summ_yes"
+      android:title="@string/toggle_builtin"
+      android:defaultValue="true"/>
+  
   <!-- <ListPreference -->
   <!--     android:defaultValue="0" -->
   <!--     android:key="initial_tab" -->
