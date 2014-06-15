@@ -22,20 +22,35 @@ public class App extends Application {
     private static boolean timing = true;
     private static boolean toastTiming = false;
     private static boolean toasting = true;
-
+    public static String SYMBOL_TYPE =
+        "com.malabarba.emacsdocumentation.INTENT_SYMBOL_TYPE";
+    
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
     }
     
-    public static void browseUrl(String u) {browseUrl(u,true,"/:");}
-    public static void browseUrl(String u, Boolean doEncode, String allow) {
+    public static void browseUrl(String u) {browseUrl(u,-1);}
+    public static void browseUrl(String u, int type) {browseUrl(u,true,"/:",type);}
+    public static void browseUrl(String u, Boolean doEncode, String allow, int type) {
         final String url = doEncode ? Uri.encode(u, allow) : u;
-        i("Browsing to: " + url);
+
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(browserIntent); 
+        if (type > -1) browserIntent.putExtra(SYMBOL_TYPE,type);
+        i("Sending browserIntent:\n" + browserIntent);
+        
+        mContext.startActivity(browserIntent); 
+    }
+
+    public static void sharePlain(String s) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, s);
+        sendIntent.setType("text/plain");
+        sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(sendIntent);
     }
 
     @SuppressWarnings("deprecation")

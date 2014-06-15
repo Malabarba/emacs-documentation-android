@@ -51,5 +51,7 @@ public class SymbolListFragment extends ListFragment {
 
     // This is externalized so that it can be called from other places.
     // Might be better to put it somewhere else eventually.
-    public static void goToDocumentationByName(String name,int type) {App.browseUrl(symbolToUrl(name, type));}
+    public static void goToDocumentationByName(String name,int type) {
+        App.browseUrl(symbolToUrl(name, type), type);
+    }
 }

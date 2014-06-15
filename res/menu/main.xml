@@ -12,14 +12,14 @@
 
   <item
       android:orderInCategory="11"
-      android:id="@+id/share_url"
-      android:title="@string/share_url"
-      android:icon="@drawable/ic_menu_share"
+      android:id="@+id/share_text"
+      android:title="@string/share_text"
+      android:icon="@drawable/ic_menu_copy"
       android:showAsAction="always|withText" />
   <item
       android:orderInCategory="12"
-      android:id="@+id/share_text"
-      android:title="@string/share_text"
+      android:id="@+id/share_url"
+      android:title="@string/share_url"
       android:icon="@drawable/ic_menu_share"
       android:showAsAction="always|withText" />
   <item

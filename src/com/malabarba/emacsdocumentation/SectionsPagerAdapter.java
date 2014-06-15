@@ -1,20 +1,30 @@
 package com.malabarba.emacsdocumentation;
 
+import java.util.ArrayList;
 import java.util.Locale;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.view.ViewGroup;
 
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     static public final String TYPE_NUMBER =
         "com.malabarba.emacsdocumentation.SymbolListFragment.TYPE_NUMBER";
+
+    private ArrayList<Fragment> tabs = new ArrayList<Fragment>();
     
     // This enum allows us to easily change the order of tabs, without
     // having to change anything else in the code. It also automates
@@ -34,44 +44,43 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public boolean tabIsDocPage(int item) {
         return item >= Tabs.values().length;
     }
+
+    public void addDocPage(String uri, int cause) {
+        Fragment fragment = new DocFragment();
+        Bundle args = new Bundle();
+        
+        args.putString(DocFragment.URI, uri);
+        args.putInt(App.SYMBOL_TYPE, cause);
+        fragment.setArguments(args);
+        
+        tabs.add(fragment);
+    }
     
     @Override
     public Fragment getItem(int item) {
-        // getItem is called to instantiate the fragment for the given page.
-    	Fragment fragment = decideNewFragment(item);
-    	Bundle args = new Bundle();
-        args.putInt(TYPE_NUMBER, item);
-        fragment.setArguments(args);
-        
-        // TODO (666504)
-        return fragment;
-    }
-    
-    public int newDocPage() {
-        return ++docPageCount;
+        return tabs.get(item);
     }
     
     private Fragment decideNewFragment (int item) {
-        if (item >= Tabs.values().length) {
-            return new DocFragment();
-        } else 
-            switch (Tabs.values()[item]) {
-            case Functions:
-            case Variables:
-                return new SymbolListFragment();
-            case About:
-                return new AboutFragment();
-            default: 
-                App.d("Strange fragment requested from sectionspageradapter");
-                return null;
-            }
+        switch (Tabs.values()[item]) {
+        case Functions:
+        case Variables:
+            Fragment fragment = new SymbolListFragment();
+            Bundle args = new Bundle();
+            args.putInt(TYPE_NUMBER, item);
+            fragment.setArguments(args);
+            return fragment;
+                
+        case About:
+            return new AboutFragment();
+        default: 
+            App.d("Strange fragment requested from sectionspageradapter");
+            return null;
+        }
     }
 
     @Override
-    public int getCount() {
-        // Show as many tabs as we have defined.
-        return Tabs.values().length + docPageCount;
-    }
+    public int getCount() {return tabs.size();}
 
     @Override
     public CharSequence getPageTitle(int item) {
@@ -84,5 +93,26 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
     }
     
-    public SectionsPagerAdapter(FragmentManager fm) {super(fm);}
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
+    }
+    
+    public SectionsPagerAdapter(FragmentManager fm) {
+        super(fm);
+        for (int i = 0; i < Tabs.values().length; ++i) {
+            tabs.add(decideNewFragment(i));
+        }        
+    }
+
+	public void removeTab(int i) {
+        tabs.remove(i);
+        notifyDataSetChanged();
+	}
+
+    // Which tab opened tab i?
+    // -1 means external.
+    public int docPageCause(int i) {
+        return tabIsDocPage(i) ? ((DocFragment) tabs.get(i)).cause : -1;
+    }
 }
