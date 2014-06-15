@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import android.net.Uri;
+import android.util.TypedValue;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -16,10 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ScrollView;
 
 public class DocFragment extends Fragment {
     static public String URI = "com.malabarba.emacsdocumentation.DocFragment.URI";
-	public TextView view = null;
+	public ScrollView view = null;
+    TextView textView = null;
     public Spanned text = null;
     public String url = null;
     public int cause = -2;
@@ -29,6 +32,14 @@ public class DocFragment extends Fragment {
         
 	}
 
+    public void incScale(float f) {
+        textView = (TextView) view.getChildAt(0);
+        float target = f*textView.getTextSize();
+        
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, target);
+        SettingsManager.put("page_zoom", target);
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         App.i("Received args:\n"+ getArguments());
@@ -36,51 +47,53 @@ public class DocFragment extends Fragment {
         cause = getArguments().getInt(App.SYMBOL_TYPE, -1);
         
         if (view == null) {
-            view = (TextView)
-                inflater.inflate(R.layout.doc_page, null, false);
-            view.setMovementMethod(LinkMovementMethod.getInstance());
+            float zoom = SettingsManager.getFloat("page_zoom");
+            view = (ScrollView) inflater.inflate(R.layout.text_doc_page, null, false);
+            textView = (TextView) view.getChildAt(0);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, zoom);
+            // view.setMovementMethod(LinkMovementMethod.getInstance());
         } else {
             ((ViewGroup) view.getParent()).removeView(view);
         }
         
-        if (text == null) {
-            setTextFromUri(view, url);
-        }
+        if (text == null) setTextFromUri(textView, url);
+        
         return view;
     }
 
-    private boolean setTextFromUri(TextView view, String uri) {
-        try {
-            URL u = new URL(uri);
-            HttpURLConnection urlConnection = (HttpURLConnection) u.openConnection();
-
+    private boolean setTextFromUri(TextView textView, String uri) {
+        if (textView != null) 
             try {
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                URL u = new URL(uri);
+                HttpURLConnection urlConnection = (HttpURLConnection) u.openConnection();
 
-                String status = urlConnection.getHeaderField(null);
+                try {
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-                if (!status.contains("200 OK")) {
-                    App.toast("Failed to retrieve page. Status:\n"+status);
-                    text = null;
-                    view.setText("Failed");
-                } else {
-                    text = Html.fromHtml(App.streamToString(in)
-                                         .replace("</br>","<br />")
-                                         .replace("<tr>","<br /><tr>"));
-                    view.setText(text);
+                    String status = urlConnection.getHeaderField(null);
+
+                    if (!status.contains("200 OK")) {
+                        App.toast("Failed to retrieve page. Status:\n"+status);
+                        text = null;
+                        textView.setText("Failed");
+                    } else {
+                        text = Html.fromHtml(App.streamToString(in)
+                                             .replace("</br>","<br />")
+                                             .replace("<tr>","<br /><tr>"));
+                        textView.setText(text);
+                    }
+                } catch (Exception e) {
+                    App.toast(""+ e);
+                    App.e("Connection error.",e);
+                    return false;
+                } finally {
+                    urlConnection.disconnect();
                 }
             } catch (Exception e) {
                 App.toast(""+ e);
                 App.e("Connection error.",e);
                 return false;
-            } finally {
-                urlConnection.disconnect();
             }
-        } catch (Exception e) {
-            App.toast(""+ e);
-            App.e("Connection error.",e);
-            return false;
-        }
         
         return true;
     }

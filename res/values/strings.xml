@@ -34,8 +34,10 @@
   <string name="symbol_is_both"> is both a Function and a Variable.
   \nWhich one did you want?</string>
   <string name="close_page">Close Page</string>
-  <string name="share_text">Text</string>
-  <string name="share_url">URL</string>
+  <string name="share_text">Share Text</string>
+  <string name="share_url">Share URL</string>
   <string name="doc_page_title">DOC</string>
   
+  <string name="zoom_in">In</string>
+  <string name="zoom_out">Out</string>
 </resources>

@@ -67,6 +67,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
     public static void createHiddenPreferences() {
         SettingsManager.putIfAbsent("selected_tab", 0, false);
+        SettingsManager.putIfAbsent("page_zoom", 16f, false);
         SettingsManager.putIfAbsent("first_time", true, false);
         SettingsManager.putIfAbsent("share_speed_mode", true, false);
         // SettingsManager.putIfAbsent("initial_tab", 0, false);

@@ -138,7 +138,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     
     @Override
     public void onRestart() {
-    	mViewPager.setCurrentItem(Math.max(SettingsManager.getInt("selected_tab"),
+    	mViewPager.setCurrentItem(Math.min(SettingsManager.getInt("selected_tab"),
                                            sectionPager.getCount() -1));
         updateActionButtons();
         super.onResume();
@@ -179,6 +179,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             if (mActionMenu != null) {
                 if (isDocPage) mActionMenu.findItem(R.id.menu_search).collapseActionView();
                 mActionMenu.findItem(R.id.menu_search).setVisible(!isDocPage);
+                mActionMenu.findItem(R.id.zoom_in).setVisible(isDocPage);
+                mActionMenu.findItem(R.id.zoom_out).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.share_url).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.share_text).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.close_page).setVisible(isDocPage);
@@ -324,12 +326,19 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                        .url);
     }
 
+    private void zoom(float f) {
+        ((DocFragment) sectionPager
+         .getItem(actionBar.getSelectedNavigationIndex())).incScale(f);
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.close_page: removeCurrentTab(); break;
         case R.id.share_url: shareURL(); break;
         case R.id.share_text: shareText(); break;
+        case R.id.zoom_in: zoom(1.1f); break;
+        case R.id.zoom_out:zoom(1/1.1f); break;
             
         case R.id.send_feedback:
             startActivity(App.emailIntent("bruce.connor.am@gmail.com",
@@ -362,6 +371,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         return true;
     }
 
+    
+    
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
@@ -374,15 +385,15 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         if (sectionPager.tabIsDocPage(previousTab)
             && !sectionPager.tabIsDocPage(position))
             menuSearch.expandActionView();
+        
+        previousTab = position;
     } 
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        previousTab = tab.getPosition();
-    }
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
 
     public void removeCurrentTab() {
         if (sectionPager

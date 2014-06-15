@@ -19,6 +19,13 @@ public class SettingsManager {
         return sp;
     }
     
+    static public float getFloat(String id) {return getFloat(id,1.0f);}
+    static public float getFloat(String id, float v) {
+        init();
+        App.i("Retrieving "+id);
+        if (edited) commit();
+        return sp.getFloat(id, v);
+    }
     static public int getInt(String id) {return getInt(id,0);}
     static public int getInt(String id, int v) {
         init();
@@ -55,6 +62,13 @@ public class SettingsManager {
         edited = false;
     }
     
+    static public void put(String id, float v) {put(id,v,true);}
+    static public void put(String id, float v, Boolean doCommit) {
+        edited = true;
+        App.i("Setting "+id+" to "+v);
+        getEditor().putFloat(id, v);
+        if (doCommit) commit();
+    }
     static public void put(String id, int v) {put(id,v,true);}
     static public void put(String id, int v, Boolean doCommit) {
         edited = true;
@@ -81,8 +95,10 @@ public class SettingsManager {
         init();
         return sp.contains(id);
     }
-    public static void putIfAbsent(String id, Integer v) {putIfAbsent(id,v,true);}
-    public static void putIfAbsent(String id, Integer v, Boolean c) {if (!contains(id)) put(id, v, c);}
+    public static void putIfAbsent(String id, float v) {putIfAbsent(id,v,true);}
+    public static void putIfAbsent(String id, float v, Boolean c) {if (!contains(id)) put(id, v, c);}
+    public static void putIfAbsent(String id, int v) {putIfAbsent(id,v,true);}
+    public static void putIfAbsent(String id, int v, Boolean c) {if (!contains(id)) put(id, v, c);}
     public static void putIfAbsent(String id, String  v) {putIfAbsent(id,v,true);}
     public static void putIfAbsent(String id, String  v, Boolean c) {if (!contains(id)) put(id, v, c);}
     public static void putIfAbsent(String id, boolean v) {putIfAbsent(id,v,true);}

@@ -10,24 +10,38 @@
 
   <!-- <item android:actionViewClass="com.actionbarsherlock.widget.SearchView" android:enabled="true" android:id="@+id/search" android:orderInCategory="1" android:showAsAction="never" android:title="title" />	 -->
 
+  
   <item
       android:orderInCategory="11"
-      android:id="@+id/share_text"
-      android:title="@string/share_text"
-      android:icon="@drawable/ic_menu_copy"
+      android:id="@+id/zoom_in"
+      android:title="@string/zoom_in"
       android:showAsAction="always|withText" />
+      <!-- android:icon="@drawable/ic_menu_copy" -->
   <item
       android:orderInCategory="12"
-      android:id="@+id/share_url"
-      android:title="@string/share_url"
-      android:icon="@drawable/ic_menu_share"
+      android:id="@+id/zoom_out"
+      android:title="@string/zoom_out"
       android:showAsAction="always|withText" />
+      <!-- android:icon="@drawable/ic_menu_share" -->
   <item
       android:orderInCategory="13"
       android:id="@+id/close_page"
       android:title="@string/close_page"
       android:icon="@drawable/ic_menu_close_clear_cancel"
       android:showAsAction="always" />
+  
+  <item
+      android:orderInCategory="110"
+      android:id="@+id/share_text"
+      android:title="@string/share_text"
+      android:icon="@drawable/ic_menu_copy"
+      android:showAsAction="never" />
+  <item
+      android:orderInCategory="120"
+      android:id="@+id/share_url"
+      android:title="@string/share_url"
+      android:icon="@drawable/ic_menu_share"
+      android:showAsAction="never" />
   
   <item
       android:id="@+id/action_settings"
@@ -38,7 +52,7 @@
   
   <item
       android:id="@+id/send_feedback"
-      android:orderInCategory="110"
+      android:orderInCategory="1100"
       android:showAsAction="never"
       android:title="@string/send_feedback" />
   
