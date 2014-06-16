@@ -30,12 +30,12 @@
       android:icon="@drawable/ic_menu_close_clear_cancel"
       android:showAsAction="always" />
   
-  <item
-      android:orderInCategory="110"
-      android:id="@+id/share_text"
-      android:title="@string/share_text"
-      android:icon="@drawable/ic_menu_copy"
-      android:showAsAction="never" />
+  <!-- <item -->
+  <!--     android:orderInCategory="110" -->
+  <!--     android:id="@+id/share_text" -->
+  <!--     android:title="@string/share_text" -->
+  <!--     android:icon="@drawable/ic_menu_copy" -->
+  <!--     android:showAsAction="never" /> -->
   <item
       android:orderInCategory="120"
       android:id="@+id/share_url"

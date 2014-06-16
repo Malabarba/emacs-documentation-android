@@ -14,9 +14,9 @@
   <string name="empty_list">No results</string>
   <string name="send_feedback">Feedback</string>
   <string name="search_hint">Search Term</string>
-  <string name="toggle_builtin">Use Built-in Viewer</string>
-  <string name="toggle_builtin_summ_yes">Using built-in viewer for documentation.</string>
-  <string name="toggle_builtin_summ_no">Using external browser for documentation.</string>
+  <string name="dark_theme">Use Dark Theme</string>
+  <string name="dark_theme_summ_yes">Currently using dark theme.\n(Requires Restart)</string>
+  <string name="dark_theme_summ_no">Currently using light theme.\n(Requires Restart)</string>
   <string name="pref_share_cat_title">Share Menu</string>
   <string name="share_speed_mode">GO on Exact Match</string>
   <string name="share_speed_mode_summ_yes">If shared string matches a name exactly, go straight to documentation. Only applies when coming from the share menu</string>

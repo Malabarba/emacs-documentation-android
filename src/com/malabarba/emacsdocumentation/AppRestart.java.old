@@ -1,0 +1,16 @@
+package com.malabarba.emacsdocumentation;
+
+/** This activity shows nothing; instead, it restarts the android process */
+public class AppRestart extends Activity {
+    // Do not forget to add it to AndroidManifest.xml
+    // <activity android:name="your.package.name.MagicAppRestart"/>
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        System.exit(0);
+    }
+    public static void doRestart(Activity activity) {
+        activity.startActivity(new Intent(activity.getApplicationContext(),
+                                          AppRestart.class));
+    }
+}

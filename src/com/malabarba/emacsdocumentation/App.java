@@ -2,8 +2,11 @@ package com.malabarba.emacsdocumentation;
 import java.io.InputStream;
 
 import android.app.Application;
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
+import android.app.PendingIntent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,6 +32,21 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+    }
+
+    public static void restart() {restart(null);}
+    public static void restart(Activity a) {
+        Intent newActivity = new Intent(mContext, MainActivity.class);
+        int pendingIntentId = 1219;
+        
+        PendingIntent pendingIntent =
+            PendingIntent.getActivity(mContext, pendingIntentId,
+                                      newActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        
+        AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, pendingIntent);
+        if  (a != null) a.finish();
+        System.exit(0);
     }
     
     public static void browseUrl(String u) {browseUrl(u,-1);}

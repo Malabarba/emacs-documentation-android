@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 //import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -14,6 +15,12 @@ public class SettingsManager {
         if (sp == null) sp = PreferenceManager.getDefaultSharedPreferences(App.getContext());
     }
     
+    static public void setTheme(Activity a) {
+        if (getBoolean("dark_theme",false))
+            a.setTheme(R.style.Theme_Sherlock);
+        else         
+            a.setTheme(R.style.Theme_Sherlock_Light);
+    }
     static public SharedPreferences getSharedPreferences() {
         init();
         return sp;

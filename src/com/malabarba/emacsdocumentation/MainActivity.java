@@ -1,6 +1,8 @@
 package com.malabarba.emacsdocumentation;
+
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,8 +25,8 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 
+public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -34,6 +36,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter sectionPager = null;    
+    PersistentFragment persistentFragment = null;
 
     /** The {@link ViewPager} that will host the section contents. */
     ViewPager mViewPager = null;
@@ -51,9 +54,18 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SettingsManager.setTheme(this);
+        
         super.onCreate(savedInstanceState);
+        onCreateImpl(); 
+        onNewIntent(getIntent());
+    }
+    
+    protected void onCreateImpl() {
         App.i("MainActivity Created");
-
+        
+        persistentFragment = PersistentFragment.get(getSupportFragmentManager());
+        
         // Get preferences to find out which tab was selected
         // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         SettingsActivity.createHiddenPreferences();
@@ -66,27 +78,27 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         } catch (Exception e) {
             App.dialog(getString(R.string.cant_create_database));
             // App.dialog("Bad exception creating Database!\n"+e);
-            App.e("Couldn't create the database:",e);
+            App.e("Couldn't create the database:", e);
         }
         App.d("Database created.");
         
         // This is in case the first invocation is from the share menu
-        onNewIntent(getIntent());
+        App.i("onCreate Done");
     }
-    
+        
     private boolean initializeStructure() {
         // Display the content xml
         setContentView(R.layout.activity_main);
 
         // Set up the action bar.
-        Integer selectedTab = SettingsManager.getInt("selected_tab");        
+        int selectedTab = SettingsManager.getInt("selected_tab");        
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
-        sectionPager = new SectionsPagerAdapter(getSupportFragmentManager());
+        sectionPager = persistentFragment.sectionPager;
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -138,8 +150,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     
     @Override
     public void onRestart() {
-    	mViewPager.setCurrentItem(Math.min(SettingsManager.getInt("selected_tab"),
-                                           sectionPager.getCount() -1));
+    	// mViewPager.setCurrentItem(Math.min(SettingsManager.getInt("selected_tab"),
+        //                                    sectionPager.getCount() -1));
         updateActionButtons();
         super.onResume();
     }
@@ -156,15 +168,13 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         getSupportMenuInflater().inflate(R.menu.main, menu);
 
         mActionMenu = menu;
+
+        configureSearchView(menu);
+        sd.updateMatches(sharedText);
+        sharedText = "";
+        
         updateActionButtons();
 
-        if (!sectionPager
-            .tabIsDocPage(actionBar.getSelectedNavigationIndex())) {
-            configureSearchView(menu);
-            sd.updateMatches(sharedText);
-            sharedText = "";
-        } 
-        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -182,7 +192,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 mActionMenu.findItem(R.id.zoom_in).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.zoom_out).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.share_url).setVisible(isDocPage);
-                mActionMenu.findItem(R.id.share_text).setVisible(isDocPage);
+                // mActionMenu.findItem(R.id.share_text).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.close_page).setVisible(isDocPage);
             }
         }
@@ -239,7 +249,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         String action = intent.getAction();
         String type = intent.getType();
         App.d("Intent Received: " + intent);
-        App.toast("Intent Received: " + intent);
+        // App.toast("Intent Received: " + intent);
 
         if (Intent.ACTION_SEND.equals(action)
             && (type != null)
@@ -248,8 +258,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
         else if (Intent.ACTION_VIEW.equals(action))
             handleSharedURL(intent);
-
-        setIntent(new Intent());
     }
 
     private void handleSharedURL(Intent intent) {
@@ -264,9 +272,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     }
     
     private void handleSharedText(Intent intent) {
-            String text = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
-            //        App.toast("Got this text:\n"+text);
-            Boolean ss = SettingsManager.getBoolean("share_speed_mode");
+        String text = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
+        //        App.toast("Got this text:\n"+text);
+        Boolean ss = SettingsManager.getBoolean("share_speed_mode");
         App.d("Share_speed is "+ ss);
         
         if (sd == null) {
@@ -326,19 +334,30 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                        .url);
     }
 
-    private void zoom(float f) {
+    private void zoom(int f) {
         ((DocFragment) sectionPager
          .getItem(actionBar.getSelectedNavigationIndex())).incScale(f);
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+        case SettingsActivity.requestCode:
+            if (resultCode != Activity.RESULT_CANCELED)
+                App.restart(this);
+            break;
+        default:break;
+        }   
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.close_page: removeCurrentTab(); break;
-        case R.id.share_url: shareURL(); break;
-        case R.id.share_text: shareText(); break;
-        case R.id.zoom_in: zoom(1.1f); break;
-        case R.id.zoom_out:zoom(1/1.1f); break;
+        case R.id.share_url:  shareURL();         break;
+            // case R.id.share_text: shareText();        break;
+        case R.id.zoom_in:    zoom(1);            break;
+        case R.id.zoom_out:   zoom(-1);           break;
             
         case R.id.send_feedback:
             startActivity(App.emailIntent("bruce.connor.am@gmail.com",
@@ -347,25 +366,26 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                                           getString(R.string.feedback_email_body)));
             break;
         case R.id.action_settings:
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivityForResult(new Intent(this, SettingsActivity.class),
+                                   SettingsActivity.requestCode);
             break;
 
-        // case R.id.toggle_builtin:
-        //     // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        //     if (SettingsManager.getBoolean("toggle_builtin")) {
-        //         // This turns it off
-        //         SettingsManager.put("toggle_builtin", false);
-        //         item.setIcon(R.drawable.btn_check_off);
-        //         item.setChecked(false);
-        //         App.toast("Using only built-in packages.");
-        //     } else {
-        //         // This turns it on
-        //         SettingsManager.put("toggle_builtin", true);
-        //         item.setIcon(R.drawable.btn_check_on);
-        //         item.setChecked(true);
-        //         App.toast("Including ELPA packages.");
-        //     }
-        //     break;
+            // case R.id.toggle_builtin:
+            //     // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            //     if (SettingsManager.getBoolean("toggle_builtin")) {
+            //         // This turns it off
+            //         SettingsManager.put("toggle_builtin", false);
+            //         item.setIcon(R.drawable.btn_check_off);
+            //         item.setChecked(false);
+            //         App.toast("Using only built-in packages.");
+            //     } else {
+            //         // This turns it on
+            //         SettingsManager.put("toggle_builtin", true);
+            //         item.setIcon(R.drawable.btn_check_on);
+            //         item.setChecked(true);
+            //         App.toast("Including ELPA packages.");
+            //     }
+            //     break;
         }
 
         return true;
