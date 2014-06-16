@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * @author Artur
+ * @author Artur Malabarba
  *
  */
 public class App extends Application {

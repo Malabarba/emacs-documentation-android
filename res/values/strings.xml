@@ -24,7 +24,7 @@
   <string name="feedback_email_body">As you can see, I\'ve included some system information. If you don\'t like it feel free to delete it.\n\nAll feedback welcome!</string>
   <string name="feedback_email_subject">Feedback - Emacs Documentation Android</string>
   <string name="about_content">Emacs Documentation v1.3\nby Artur Malabarba\n\n
-  If you like my work, buy the donate version:\n
+  If you like my work, buy the\n
   <a href="market://details?id=com.malabarba.emacsdocumentation">Donate Version</a>\n\n
   or donate through Paypal:\n
   <a href="https://www.paypal.com/cgi-bin/webscr\?cmd=_s-xclick&amp;hosted_button_id=GLZLRLW72Q8G2">Donate</a></string>
