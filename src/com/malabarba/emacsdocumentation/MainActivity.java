@@ -23,6 +23,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import android.webkit.WebView;
+import android.webkit.WebSettings;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -36,7 +39,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter sectionPager = null;    
-    PersistentFragment persistentFragment = null;
+    // PersistentFragment persistentFragment = null;
 
     /** The {@link ViewPager} that will host the section contents. */
     ViewPager mViewPager = null;
@@ -63,8 +66,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     
     protected void onCreateImpl() {
         App.i("MainActivity Created");
-        
-        persistentFragment = PersistentFragment.get(getSupportFragmentManager());
         
         // Get preferences to find out which tab was selected
         // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -98,8 +99,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
-        sectionPager = persistentFragment.sectionPager;
-
+        sectionPager = new SectionsPagerAdapter(getSupportFragmentManager());
+        
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(sectionPager);
@@ -184,9 +185,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         if (sectionPager != null) {
             boolean isDocPage =
                 sectionPager
-                .tabIsDocPage(actionBar.getSelectedNavigationIndex());
-            
-            if (mActionMenu != null) {
+                .tabIsDocPage(actionBar.getSelectedNavigationIndex());            if (mActionMenu != null) {
                 if (isDocPage) mActionMenu.findItem(R.id.menu_search).collapseActionView();
                 mActionMenu.findItem(R.id.menu_search).setVisible(!isDocPage);
                 mActionMenu.findItem(R.id.zoom_in).setVisible(isDocPage);
@@ -196,9 +195,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 mActionMenu.findItem(R.id.close_page).setVisible(isDocPage);
             }
         }
-    }    
-    
-    public boolean configureSearchView(Menu menu) {
+    }    public boolean configureSearchView(Menu menu) {
         // Show the search menu item in menu.xml
         menuSearch = menu.findItem(R.id.menu_search);
 
@@ -322,22 +319,19 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {} 
 	};
 
-    private void shareText() {
-        App.sharePlain(((DocFragment) sectionPager
-                        .getItem(actionBar.getSelectedNavigationIndex()))
-                       .text.toString());
+    private DocFragment currentDoc() {
+        int ind = actionBar.getSelectedNavigationIndex();    
+        Fragment frag = sectionPager.getItem(ind);
+        DocFragment doc = (DocFragment) frag;
+        App.d("ActionBar selected item is "+ind);        
+        App.d("That corresponds to fragment "+frag);
+        App.d("Converted to DocFragment "+doc);
+        return doc;
     }
     
-    private void shareURL() {
-        App.sharePlain(((DocFragment) sectionPager
-                        .getItem(actionBar.getSelectedNavigationIndex()))
-                       .url);
-    }
-
-    private void zoom(int f) {
-        ((DocFragment) sectionPager
-         .getItem(actionBar.getSelectedNavigationIndex())).incScale(f);
-    }
+    private void shareText() {App.sharePlain(currentDoc().text.toString());}
+    private void shareURL() {App.sharePlain(currentDoc().url);}
+    private void zoom(int f) {currentDoc().incScale(f);}
 
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
@@ -436,6 +430,6 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         super.onDestroy();
         App.d("Closing the Database (activity destroyed).");
         sd.close();
+        // App.restart();
     }
-
 }

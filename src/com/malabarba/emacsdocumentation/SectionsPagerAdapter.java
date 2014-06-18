@@ -32,6 +32,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     static public enum Tabs {About, Functions, Variables};
     int docPageCount = 0;
     
+    public SectionsPagerAdapter(FragmentManager fm) {
+        super(fm);
+        for (int i = 0; i < Tabs.values().length; ++i) {
+            tabs.add(decideNewFragment(i));
+        }        
+    }
+    
     public static String getDir(int item) {
         switch (Tabs.values()[item]) {
         case Functions: return "Fun";
@@ -47,6 +54,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     public void addDocPage(String uri, int cause) {
         Fragment fragment = new DocFragment();
+        // fragment.setRetainInstance(true);
         Bundle args = new Bundle();
         
         args.putString(DocFragment.URI, uri);
@@ -66,13 +74,16 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         case Functions:
         case Variables:
             Fragment fragment = new SymbolListFragment();
+            // fragment.setRetainInstance(true);
             Bundle args = new Bundle();
             args.putInt(TYPE_NUMBER, item);
             fragment.setArguments(args);
             return fragment;
                 
         case About:
-            return new AboutFragment();
+            Fragment af = new AboutFragment();
+            // af.setRetainInstance(true);
+            return af;
         default: 
             App.d("Strange fragment requested from sectionspageradapter");
             return null;
@@ -97,13 +108,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object){
         return PagerAdapter.POSITION_NONE;
     }
-    
-    public SectionsPagerAdapter(FragmentManager fm) {
-        super(fm);
-        for (int i = 0; i < Tabs.values().length; ++i) {
-            tabs.add(decideNewFragment(i));
-        }        
-    }
 
 	public void removeTab(int i) {
         tabs.remove(i);
@@ -114,5 +118,16 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     // -1 means external.
     public int docPageCause(int i) {
         return tabIsDocPage(i) ? ((DocFragment) tabs.get(i)).cause : -1;
+    }
+
+    public void detach() {
+        App.d("Detaching "+this);
+        for (int i = 0; i < Tabs.values().length; ++i)
+            tabs.set(i, null);
+    }
+    public void recycle() {
+        App.d("Recycling "+this);
+        for (int i = 0; i < Tabs.values().length; ++i)
+            tabs.set(i, decideNewFragment(i));
     }
 }

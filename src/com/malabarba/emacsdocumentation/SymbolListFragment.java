@@ -9,10 +9,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-//import com.actionbarsherlock.internal.widget.IcsAdapterView.OnItemLongClickListener;
-
 public class SymbolListFragment extends ListFragment {
-    static private final String baseUrl = "http://bruce-connor.github.io/emacs-online-documentation/";
+    static private final String baseUrl =
+        "http://bruce-connor.github.io/emacs-online-documentation/";
     private int typeInt = -1;
     
     @Override
@@ -27,7 +26,6 @@ public class SymbolListFragment extends ListFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
     
-
     static private String symbolToUrl(String s, int type) {
         return baseUrl
             + SectionsPagerAdapter.getDir(type) + "/" 
@@ -38,7 +36,6 @@ public class SymbolListFragment extends ListFragment {
     public void onStart() {
         super.onStart();
         setEmptyText(getString(R.string.empty_list));
-        // if (typeInt == SectionsPagerAdapter.Tabs.values()) setEmptyText("Sorry, not implemented yet!"); // This is for the RANDOM tab
 
         getListView().setOnItemClickListener(new OnItemClickListener() {       
                 @Override
