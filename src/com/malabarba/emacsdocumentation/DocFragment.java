@@ -29,24 +29,35 @@ public class DocFragment extends Fragment {
     public DocFragment() {}
 
     public void incScale(int f) {
-        final WebSettings ws = view.getSettings();
-        int fontSize = f + ws.getDefaultFontSize();
-        ws.setDefaultFixedFontSize(fontSize);
-        ws.setDefaultFontSize(fontSize);
+        if (view == null) {
+            App.e("Docs WebView is null!: "+this);
+            view = (WebView) getView();
+            App.e("Docs WebView set to: "+view);
+        } else {
+            final WebSettings ws = view.getSettings();
+            int fontSize = f + ws.getDefaultFontSize();
+            ws.setDefaultFixedFontSize(fontSize);
+            ws.setDefaultFontSize(fontSize);
         
-        SettingsManager.put("page_font_size", fontSize);
+            SettingsManager.put("page_font_size", fontSize);
+        }
+    }
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.i("Received args:\n"+ getArguments());
+        url = getArguments().getString(URI);
+        cause = getArguments().getInt(App.SYMBOL_TYPE, -1);        
     }
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.i("Received args:\n"+ getArguments());
-        url = getArguments().getString(URI);
-        cause = getArguments().getInt(App.SYMBOL_TYPE, -1);
-        
         if (view == null) {
             // Inflate the webview
             view = (WebView)
                 inflater.inflate(R.layout.doc_page, null, false);
+            App.i(""+this+" Inflated view: "+view);
 
             // Load the url
             view.loadUrl(url);
@@ -57,7 +68,11 @@ public class DocFragment extends Fragment {
             ws.setDefaultFixedFontSize(fontSize);
             ws.setDefaultFontSize(fontSize);
         } else {
-            ((ViewGroup) view.getParent()).removeView(view);
+            ViewGroup vg = (ViewGroup) view.getParent();
+            App.i("getParent on a DocFragment view. Returned: "+vg);
+            
+            if (vg != null) vg.removeView(view);
+            App.i("ViewGroup detached. Our view is now: "+view);
         }
         
         return view;
