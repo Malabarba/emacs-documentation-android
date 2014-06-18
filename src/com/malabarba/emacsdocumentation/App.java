@@ -44,7 +44,7 @@ public class App extends Application {
                                       newActivity, PendingIntent.FLAG_CANCEL_CURRENT);
         
         AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 300, pendingIntent);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 200, pendingIntent);
         if  (a != null) a.finish();
         System.exit(0);
     }
