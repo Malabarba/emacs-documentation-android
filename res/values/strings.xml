@@ -23,11 +23,14 @@
   <string name="share_speed_mode_summ_no">Offer list of matches even if match is exact. Only applies when coming from the share menu.</string>
   <string name="feedback_email_body">As you can see, I\'ve included some system information. If you don\'t like it feel free to delete it.\n\nAll feedback welcome!</string>
   <string name="feedback_email_subject">Feedback - Emacs Documentation Android</string>
-  <string name="about_content">Emacs Documentation v1.3\nby Artur Malabarba\n\n
-  If you like my work, buy the\n
-  <a href="market://details?id=com.malabarba.emacsdocumentation">Donate Version</a>\n\n
-  or donate through Paypal:\n
-  <a href="https://www.paypal.com/cgi-bin/webscr\?cmd=_s-xclick&amp;hosted_button_id=GLZLRLW72Q8G2">Donate</a></string>
+  <string name="about_content">
+    <a href="http://doc.endlessparentheses.com/">Emacs Documentation</a>
+    v1.3\nby Artur Malabarba\n\n
+    If you like my work, buy the\n
+    <a href="market://details?id=com.malabarba.emacsdocumentation">Donate Version</a>\n\n
+    or\n
+    <a href="https://www.paypal.com/cgi-bin/webscr\?cmd=_s-xclick&amp;hosted_button_id=GLZLRLW72Q8G2">donate through Paypal</a>
+  </string>
   <string name="cant_create_database">I couldn\'t create the database.\nIs your storage full?</string>
   <string name="function">Function</string>
   <string name="variable">Variable</string>
