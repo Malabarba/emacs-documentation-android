@@ -25,12 +25,18 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
 
-        <data android:host="bruce-connor.github.io" android:scheme="http"
+        <data android:host="endlessparentheses.com" android:scheme="http"
               android:pathPrefix="/emacs-online-documentation/Fun"/>
-        <data android:host="bruce-connor.github.io" android:scheme="http"
+        <data android:host="endlessparentheses.com" android:scheme="http"
               android:pathPrefix="/emacs-online-documentation/Face"/>
-        <data android:host="bruce-connor.github.io" android:scheme="http"
+        <data android:host="endlessparentheses.com" android:scheme="http"
               android:pathPrefix="/emacs-online-documentation/Var"/>
+        <data android:host="doc.endlessparentheses.com"
+              android:scheme="http" android:pathPrefix="/Fun"/>
+        <data android:host="doc.endlessparentheses.com"
+              android:scheme="http" android:pathPrefix="/Face"/>
+        <data android:host="doc.endlessparentheses.com"
+              android:scheme="http" android:pathPrefix="/Var"/>
       </intent-filter>
       
       <intent-filter>

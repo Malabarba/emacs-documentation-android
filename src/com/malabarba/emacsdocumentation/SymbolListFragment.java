@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class SymbolListFragment extends ListFragment {
     static private final String baseUrl =
-        "http://bruce-connor.github.io/emacs-online-documentation/";
+        "http://doc.endlessparentheses.com/";
     private int typeInt = -1;
     
     @Override
