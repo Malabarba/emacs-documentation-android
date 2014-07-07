@@ -1,5 +1,7 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
+import com.malabarba.util.SettingsManager;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -38,7 +40,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
      * intensive, it may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter sectionPager = null;    
+    SectionsPagerAdapter sectionPager = null;
     // PersistentFragment persistentFragment = null;
 
     /** The {@link ViewPager} that will host the section contents. */
@@ -57,16 +59,23 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SettingsManager.setTheme(this);
-        
+        setTheme(this);
+
         super.onCreate(savedInstanceState);
-        onCreateImpl(); 
+        onCreateImpl();
         onNewIntent(getIntent());
     }
-    
+
+    static public void setTheme(Activity a) {
+        if (SettingsManager.getBoolean("dark_theme",false))
+            a.setTheme(R.style.Theme_Sherlock);
+        else
+            a.setTheme(R.style.Theme_Sherlock_Light);
+    }
+
     protected void onCreateImpl() {
         App.i("MainActivity Created");
-        
+
         // Get preferences to find out which tab was selected
         // SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         SettingsActivity.createHiddenPreferences();
@@ -82,17 +91,17 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             App.e("Couldn't create the database:", e);
         }
         App.d("Database created.");
-        
+
         // This is in case the first invocation is from the share menu
         App.i("onCreate Done");
     }
-        
+
     private boolean initializeStructure() {
         // Display the content xml
         setContentView(R.layout.activity_main);
 
         // Set up the action bar.
-        int selectedTab = SettingsManager.getInt("selected_tab");        
+        int selectedTab = SettingsManager.getInt("selected_tab");
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -100,7 +109,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
         sectionPager = new SectionsPagerAdapter(getSupportFragmentManager());
-        
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(sectionPager);
@@ -148,21 +157,21 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         } else
             super.onBackPressed();
     }
-    
+
     @Override
     public void onRestart() {
-    	// mViewPager.setCurrentItem(Math.min(SettingsManager.getInt("selected_tab"),
+        // mViewPager.setCurrentItem(Math.min(SettingsManager.getInt("selected_tab"),
         //                                    sectionPager.getCount() -1));
         updateActionButtons();
         super.onResume();
     }
-    
+
     @Override
     public void onPause() {
-    	SettingsManager.put("selected_tab", actionBar.getSelectedNavigationIndex());
+        SettingsManager.put("selected_tab", actionBar.getSelectedNavigationIndex());
         super.onPause();
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -173,7 +182,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         configureSearchView(menu);
         sd.updateMatches(sharedText);
         sharedText = "";
-        
+
         updateActionButtons();
 
         return super.onCreateOptionsMenu(menu);
@@ -212,8 +221,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 public boolean onMenuItemActionCollapse(MenuItem item) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editSearch.getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
                     // Empty EditText to remove text filtering
                     editSearch.setText("");
                     editSearch.clearFocus();
@@ -230,19 +239,19 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                     imm.showSoftInput(editSearch, 0);
                     return true;
                 }
-			
+
             });
         // And start expanded
         menuSearch.expandActionView();
         editSearch.setText(sharedText);
-        
+
         return true;
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        
+
         String action = intent.getAction();
         String type = intent.getType();
         App.d("Intent Received: " + intent);
@@ -259,34 +268,34 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
     private void handleSharedURL(Intent intent) {
         sectionPager.addDocPage(intent.getData().toString(),
-                                intent.getIntExtra(App.SYMBOL_TYPE, -1));
-        
+                                intent.getIntExtra(App.EXTRA_INT, -1));
+
         actionBar.addTab(actionBar.newTab()
                          .setText(getString(R.string.doc_page_title))
                          .setTabListener(this), true);
-        
+
         sectionPager.notifyDataSetChanged();
     }
-    
+
     private void handleSharedText(Intent intent) {
         String text = intent.getStringExtra(Intent.EXTRA_TEXT).trim();
         //        App.toast("Got this text:\n"+text);
         Boolean ss = SettingsManager.getBoolean("share_speed_mode");
         App.d("Share_speed is "+ ss);
-        
+
         if (sd == null) {
             App.e("sd is null!");
             return;
         } // else {
-        // 	sd.getReadableDatabase();
+        //  sd.getReadableDatabase();
         // }
-        
+
         App.d("Database ready to query.");
         // Look for exact match if the preference says so.
         // TODO (800334)
-        
+
         if (ss && sd.lookForExactMatch(text, getSupportFragmentManager())) App.d("Found shared!");//return;
-       
+
         // TODO (150989)
         // Check if the menu is expanded
         App.d("No text found, filling the menu.");
@@ -303,7 +312,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         // editSearch = (EditText) menuSearch.getActionView();
         // editSearch.setText
     }
-    
+
     // EditText TextWatcher
     private TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -314,21 +323,21 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             }
 
             @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {} 
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
             @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {} 
-	};
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+    };
 
     private DocFragment currentDoc() {
-        int ind = actionBar.getSelectedNavigationIndex();    
+        int ind = actionBar.getSelectedNavigationIndex();
         Fragment frag = sectionPager.getItem(ind);
         DocFragment doc = (DocFragment) frag;
-        App.d("ActionBar selected item is "+ind);        
+        App.d("ActionBar selected item is "+ind);
         App.d("That corresponds to fragment "+frag);
         App.d("Converted to DocFragment "+doc);
         return doc;
     }
-    
+
     private void shareText() {App.sharePlain(currentDoc().text.toString());}
     private void shareURL() {App.sharePlain(currentDoc().url);}
     private void zoom(int f) {currentDoc().incScale(f);}
@@ -341,9 +350,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 App.restart(this);
             break;
         default:break;
-        }   
+        }
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -352,7 +361,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
             // case R.id.share_text: shareText();        break;
         case R.id.zoom_in:    zoom(1);            break;
         case R.id.zoom_out:   zoom(-1);           break;
-            
+
         case R.id.send_feedback:
             startActivity(App.emailIntent("bruce.connor.am@gmail.com",
                                           getString(R.string.feedback_email_subject),
@@ -385,8 +394,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         return true;
     }
 
-    
-    
+
+
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
@@ -399,9 +408,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         if (sectionPager.tabIsDocPage(previousTab)
             && !sectionPager.tabIsDocPage(position))
             menuSearch.expandActionView();
-        
+
         previousTab = position;
-    } 
+    }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
@@ -411,20 +420,20 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
     public void removeCurrentTab() {
         if (sectionPager
-            .tabIsDocPage(actionBar.getSelectedNavigationIndex())) 
+            .tabIsDocPage(actionBar.getSelectedNavigationIndex()))
             removeTab(actionBar.getSelectedTab());
         else
             App.toast("This button should not be available "+
                       "in this page.\nPlease send a bug report.");
     }
-    
+
     public void removeTab(ActionBar.Tab tab) {
 //        sectionPager.remove(tab.getTag());
         int i = tab.getPosition();
         actionBar.removeTab(tab);
-    	sectionPager.removeTab(i);
+        sectionPager.removeTab(i);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

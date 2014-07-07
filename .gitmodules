@@ -1,0 +1,3 @@
+[submodule "src/com/malabarba/util"]
+	path = src/com/malabarba/util
+	url = git@github.com:Bruce-Connor/util-android.git

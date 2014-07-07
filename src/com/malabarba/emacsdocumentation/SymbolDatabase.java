@@ -1,8 +1,6 @@
-/**
- * 
- */
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -135,11 +133,11 @@ public class SymbolDatabase extends SQLiteAssetHelper {
             // if (var != null)
             //     SymbolTypeDialog.createAndShow(fm, fun,var);
             // else
-            SymbolListFragment.goToDocumentationByName(fun, SectionsPagerAdapter.Tabs.Functions.ordinal());
+            SymbolListFragment.goToDocumentationByName(fun, SectionsPagerAdapter.Tabs.Functions.ordinal(), true);
             // Either way, return true cause it worked
             return true;
         } else if (var != null) {
-            SymbolListFragment.goToDocumentationByName(var, SectionsPagerAdapter.Tabs.Variables.ordinal());
+            SymbolListFragment.goToDocumentationByName(var, SectionsPagerAdapter.Tabs.Variables.ordinal(), true);
             return true;
         }
         

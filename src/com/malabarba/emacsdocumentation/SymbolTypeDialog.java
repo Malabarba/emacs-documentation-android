@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;

@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
 //import com.malabarba.util.HugeSQLiteCursor;
 
 import android.content.Context;

@@ -1,5 +1,7 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.SettingsManager;
+import com.malabarba.util.App;
 import android.content.SharedPreferences;
 //import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -62,7 +64,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        SettingsManager.setTheme(this);
+        MainActivity.setTheme(this);
         
         super.onCreate(savedInstanceState);
         //		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {

@@ -1,5 +1,7 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

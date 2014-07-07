@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -49,6 +50,9 @@ public class SymbolListFragment extends ListFragment {
     // This is externalized so that it can be called from other places.
     // Might be better to put it somewhere else eventually.
     public static void goToDocumentationByName(String name,int type) {
-        App.browseUrl(symbolToUrl(name, type), type);
+        goToDocumentationByName(name, type, false);
+    }
+    public static void goToDocumentationByName(String name,int type, boolean external) {
+        App.browseUrl(symbolToUrl(name, type), external ? -1 : type);
     }
 }

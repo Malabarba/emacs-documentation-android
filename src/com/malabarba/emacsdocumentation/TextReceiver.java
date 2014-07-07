@@ -1,5 +1,6 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

@@ -1,5 +1,7 @@
 package com.malabarba.emacsdocumentation;
 
+import com.malabarba.util.App;
+import com.malabarba.util.SettingsManager;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,11 +23,11 @@ import android.widget.TextView;
 
 public class DocFragment extends Fragment {
     static public String URI = "com.malabarba.emacsdocumentation.DocFragment.URI";
-	public WebView view = null;
+    public WebView view = null;
     public Spanned text = null;
     public String url = null;
     public int cause = -2;
-    
+
     public DocFragment() {}
 
     public void incScale(int f) {
@@ -38,19 +40,19 @@ public class DocFragment extends Fragment {
             int fontSize = f + ws.getDefaultFontSize();
             ws.setDefaultFixedFontSize(fontSize);
             ws.setDefaultFontSize(fontSize);
-        
+
             SettingsManager.put("page_font_size", fontSize);
         }
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.i("Received args:\n"+ getArguments());
         url = getArguments().getString(URI);
-        cause = getArguments().getInt(App.SYMBOL_TYPE, -1);        
+        cause = getArguments().getInt(App.EXTRA_INT, -1);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
@@ -70,11 +72,11 @@ public class DocFragment extends Fragment {
         } else {
             ViewGroup vg = (ViewGroup) view.getParent();
             App.i("getParent on a DocFragment view. Returned: "+vg);
-            
+
             if (vg != null) vg.removeView(view);
             App.i("ViewGroup detached. Our view is now: "+view);
         }
-        
+
         return view;
     }
 
@@ -110,7 +112,7 @@ public class DocFragment extends Fragment {
     //         App.e("Connection error.",e);
     //         return false;
     //     }
-        
+
     //     return true;
     // }
 }
