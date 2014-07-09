@@ -11,10 +11,12 @@ project website
 
 Code available here depends on
 [HugeSQLiteCursor](https://github.com/Bruce-Connor/hugesqlitecursor/)
-(an android lib developed by me) and
+(an android lib developed by me), on my 
+[utility classes](https://github.com/Bruce-Connor/util-android)
+git submodule, and on
 [actionbarsherlock](http://actionbarsherlock.com/).
 
-Though the app does have a (very narrow) target audience, this project
+Though the app does have a (narrow) target audience, this project
 is mostly a test of concept and android-programming knowledge.  
 It features the following:
 
