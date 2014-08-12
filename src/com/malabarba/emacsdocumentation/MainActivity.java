@@ -54,6 +54,8 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     MenuItem menuSearch = null;
     /** The text we receive from other apps. */
     String sharedText = "";
+    /** The text we kept when closing the search bar. */
+    String keptText = "";
     /** The Database. */
     SymbolDatabase sd = null;
 
@@ -192,10 +194,14 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
     // tab.
     public void updateActionButtons() {
         if (sectionPager != null) {
-            boolean isDocPage =
-                sectionPager
-                .tabIsDocPage(actionBar.getSelectedNavigationIndex());            if (mActionMenu != null) {
-                if (isDocPage) mActionMenu.findItem(R.id.menu_search).collapseActionView();
+            boolean isDocPage = sectionPager
+                .tabIsDocPage(actionBar.getSelectedNavigationIndex());
+            if (mActionMenu != null) {
+                if (isDocPage) {
+                    if (keptText.equals("")) 
+                        keptText = editSearch.getText().toString();
+                    menuSearch.collapseActionView();
+                }
                 mActionMenu.findItem(R.id.menu_search).setVisible(!isDocPage);
                 mActionMenu.findItem(R.id.zoom_in).setVisible(isDocPage);
                 mActionMenu.findItem(R.id.zoom_out).setVisible(isDocPage);
@@ -204,7 +210,9 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
                 mActionMenu.findItem(R.id.close_page).setVisible(isDocPage);
             }
         }
-    }    public boolean configureSearchView(Menu menu) {
+    }    
+    
+    public boolean configureSearchView(Menu menu) {
         // Show the search menu item in menu.xml
         menuSearch = menu.findItem(R.id.menu_search);
 
@@ -406,8 +414,13 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
         updateActionButtons();
 
         if (sectionPager.tabIsDocPage(previousTab)
-            && !sectionPager.tabIsDocPage(position))
+            && !sectionPager.tabIsDocPage(position)) {
             menuSearch.expandActionView();
+            if (sharedText.equals("")) {
+                editSearch.setText(keptText);
+                keptText = "";
+            }
+        }
 
         previousTab = position;
     }
